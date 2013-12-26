@@ -17,6 +17,8 @@ angular.module('timer', [])
         //backward and forward compatibility.
         $scope.autoStart = $attrs.autoStart || $attrs.autostart;
 
+        $scope.prefix = $attrs.prefix ? $attrs.prefix + '-' : '';
+
         if ($element.html().trim().length === 0) {
           $element.append($compile('<span>{{millis}}</span>')($scope));
         }
@@ -30,15 +32,15 @@ angular.module('timer', [])
         $scope.countdown = $scope.countdownattr && parseInt($scope.countdownattr, 10) >= 0 ? parseInt($scope.countdownattr, 10) : undefined;
         $scope.isRunning = false;
 
-        $scope.$on('timer-start', function () {
+        $scope.$on($scope.prefix + 'timer-start', function () {
           $scope.start();
         });
 
-        $scope.$on('timer-resume', function () {
+        $scope.$on($scope.prefix + 'timer-resume', function () {
           $scope.resume();
         });
 
-        $scope.$on('timer-stop', function () {
+        $scope.$on($scope.prefix + 'timer-stop', function () {
           $scope.stop();
         });
 
@@ -68,7 +70,7 @@ angular.module('timer', [])
         $scope.stop = $scope.pause = $element[0].stop = $element[0].pause = function () {
           $scope.stoppedTime = new Date();
           resetTimeout();
-          $scope.$emit('timer-stopped', {millis: $scope.millis, seconds: $scope.seconds, minutes: $scope.minutes, hours: $scope.hours, days: $scope.days});
+          $scope.$emit($scope.prefix + 'timer-stopped', {millis: $scope.millis, seconds: $scope.seconds, minutes: $scope.minutes, hours: $scope.hours, days: $scope.days});
           $scope.timeoutId = null;
         };
 
@@ -127,7 +129,7 @@ angular.module('timer', [])
             $scope.$digest();
           }, $scope.interval - adjustment);
 
-          $scope.$emit('timer-tick', {timeoutId: $scope.timeoutId, millis: $scope.millis});
+          $scope.$emit($scope.prefix + 'timer-tick', {timeoutId: $scope.timeoutId, millis: $scope.millis});
         };
 
         if ($scope.autoStart === undefined || $scope.autoStart === true) {

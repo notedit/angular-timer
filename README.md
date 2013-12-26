@@ -17,3 +17,14 @@ grunt tests
 ```
 
 
+### Add attr prefix
+
+<timer prefix="first"/>
+
+<timer prefix="second"/>
+
+$scope.$broadcast('first-timer-start');
+
+$scope.$broadcast('second-timer-start');
+
+
